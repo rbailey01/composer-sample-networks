@@ -1,0 +1,44 @@
+/**
+ * receivables network
+ */
+namespace org.acme.receivables
+
+/*Document contains 1:many LineItemDetail
+*/
+asset Document identified by docId {
+    o String docId
+    o String description
+    o String postedBy
+    o String dueDate
+    o Double balance
+    o PostLineItemDetail[] lid
+    --> Customer owner
+}
+
+/*customer has 0:many Document*/
+participant Customer identified by custId {
+    o String custId
+    o String firstName
+    o String lastName
+    o String address
+}
+
+/* got this from auction.cto look there
+   for script details to create
+*/
+transaction PostLineItemDetail {
+  o String tranCode /*170 = invoice, 600 cr, 400 db */
+  o Double tranAmt
+  o String reason
+  o String postedBy
+  o String postedDate
+  --> Customer customer
+}
+
+event PostLIneItemDetailNotification {
+    --> Document document
+}
+
+transaction ViewDocument {
+    --> Document document
+}
